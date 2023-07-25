@@ -32,7 +32,7 @@ class HelperOrderMultiple
         $response = $client->request('POST', $url, [
             \GuzzleHttp\RequestOptions::JSON => [
                 'pay_method' => env('PAY_METHOD'),
-                'items'      => [$arrData]
+                'items'      => $arrData
             ],
         ]);
 
