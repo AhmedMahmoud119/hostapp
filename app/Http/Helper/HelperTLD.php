@@ -15,14 +15,6 @@ class HelperTLD
     public static function availableTLD($userJawaly)
     {
         $url = env('API_URL') . "/api/domain/order";
-//        $client = HelperGeneral::client($userJawaly);
-//
-//        $response = $client->request('GET', $url, [
-//            \GuzzleHttp\RequestOptions::JSON => [],
-//        ]);
-//
-//        $response_data = $response->getBody()->getContents();
-//        $responseArr = json_decode($response_data, true);
         $params = [];
         $response_data = HelperGeneral::curl($url,'GET',$userJawaly,$params);
         $responseArr = json_decode($response_data, true);
@@ -35,6 +27,16 @@ class HelperTLD
                 'tld_id'=>$tld['id'],
             ]);
         }
+
+        return $responseArr;
+    }
+
+    public static function tldForm($userJawaly)
+    {
+        $url = env('API_URL') . '/api/domain/order/'.request()->data['tld_id'].'/form';
+        $params = [];
+        $response_data = HelperGeneral::curl($url,'GET',$userJawaly,$params);
+        $responseArr = json_decode($response_data, true);
 
         return $responseArr;
     }

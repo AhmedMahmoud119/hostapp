@@ -15,13 +15,12 @@ class Helper
     public static function verifyUserjawaly()
     {
         try {
-
-
             $curl = curl_init();
             $app_hash = base64_encode(request()->api_key . ':' . request()->api_secret);
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api-sms.4jawaly.com/api/v1/account/area/me',
+//                CURLOPT_URL => 'https://api-sms.4jawaly.com/api/v1/account/area/me',
+                CURLOPT_URL => 'https://api-sms-dev.4jawaly.com/api/v1/account/area/me',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -42,7 +41,7 @@ class Helper
 
             $jawaly = json_decode($jawaly_data, true);
 
-            if ($jawaly['code'] != 200) {
+            if (isset($jawaly['code']) && $jawaly['code'] != 200) {
                 return $jawaly;
             }
 
@@ -60,7 +59,8 @@ class Helper
 
             return $user;
         } catch (Exception $e) {
-            return $e->getResponse()->getBody()->getContents();
+            return $e->getMessage();
+//            return $e->getResponse()->getBody()->getContents();
         }
 
     }
@@ -209,8 +209,8 @@ class Helper
     {
         $url = env('API_URL') . "/api/domain/order";
         $client = HelperGeneral::client($userJawaly);
-        $host = parse_url(request()->data['name'], PHP_URL_HOST);
-        $host = str_ireplace('www.', '', $host);
+        $host = parse_url(request()->data['name']);
+        $host = str_ireplace('www.', '', $host['host']??($host['path']??''));
         $tld = strstr($host, '.');
         $TldModel = Tld::where('tld',$tld)->first();
 

@@ -63,148 +63,226 @@ class EventController extends Controller
                 }
                 OrderDomain::orderDomain($userJawaly);
                 break;
-            case 'client.search.domain':
-                break;
-            case 'client.search.domain':
-                break;
-        }
-
-        if ($request->event == 'client.login') {
-            $token = ClientLogin::clientLogin($userJawaly);
-        } else if ($request->event == 'client.search.domain') {
-            $request->validate([
-                'data.name' => 'required',
-            ], [
-                'data.name.required' => 'حقل الاسم الزامي',
-            ]);
-            $searchDomain = SearchDomain::searchDomain($userJawaly);
-        }elseif ($request->event == 'client.order.domain') {
-            $request->validate([
-                'data.name' => 'required',
-                'data.years' => 'required',
-                'data.action' => 'required',
-            ], [
-                'data.name.required' => 'حقل الاسم الزامي',
-                'data.years.required' => 'حقل السنين الزامي',
-                'data.action.required' => 'حقل الاكشن الزامي',
-            ]);
-            if ($request->data['action'] == 'transfer') {
+            case 'client.order.active':
                 $request->validate([
-                    'data.epp' => 'required',
+                    'data.invoice_id' => 'required',
                 ], [
-                    'data.epp.required' => 'حقل epp الزامي',
+                    'data.invoice_id.required' => 'رقم الفاتوره الزامي',
                 ]);
-            }
-            $orderDomain = OrderDomain::orderDomain($userJawaly);
-        }elseif ($request->event == 'client.order.active') {
-            $request->validate([
-                'data.invoice_id' => 'required',
-            ], [
-                'data.invoice_id.required' => 'رقم الفاتوره الزامي',
-            ]);
-            $activeOrder = ActiveOrder::activeOrder($userJawaly);
-        }elseif ($request->event == 'client.add.contact') {
-            $request->validate([
-                'data.firstname' => 'required',
-                'data.lastname' => 'required',
-                'data.email' => 'required',
-            ]);
-            $addContact = Contact::addContact($userJawaly);
-        }elseif ($request->event == 'client.list.contact') {
-            $getContact = Contact::getContacts($userJawaly);
-        }elseif ($request->event == 'client.list.categories') {
-            $getCategories = Product::getCategories($userJawaly);
-        }elseif ($request->event == 'client.list.products') {
-            $request->validate([
-                'data.category_id' => 'required',
-            ]);
-            $getProducts = Product::getProducts($userJawaly);
-        }elseif ($request->event == 'client.order.product') {
-            $request->validate([
-                'data.product_id' => 'required',
-                'data.domain' => 'required',
-                'data.cycle' => 'required',
-            ]);
-            $orderProduct = Product::orderProduct($userJawaly);
-        }elseif ($request->event == 'client.order-multiple') {
-            $request->validate([
-                'data' => 'required|array',
-                'data.*.type' => 'required',
-            ], [
-                'data.required' => 'حقل البيانات',
-                'data.*.type.required' => 'حقل النوع الزامي',
-            ]);
-            $orderMultiple = OrderMultiple::orderMultiple($userJawaly);
-        }elseif ($request->event == 'client.list.domains'){
-            $listDomains = SearchDomain::listDomains($userJawaly);
-        }elseif ($request->event == 'client.domain.details'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            $domainDetails = SearchDomain::domainDetails($userJawaly);
-        }elseif ($request->event == 'client.create.dns'){
-            $request->validate([
-                'data.id' => 'required',
-                'data.name' => 'required',
-                'data.type' => 'required',
-                'data.priority' => 'required',
-                'data.content' => 'required',
-            ]);
-            SearchDomain::createDns($userJawaly);
-        }elseif ($request->event == 'client.update.dns'){
-            $request->validate([
-                'data.id' => 'required',
-                'data.record_id' => 'required',
-                'data.name' => 'required',
-                'data.type' => 'required',
-                'data.priority' => 'required',
-                'data.content' => 'required',
-            ]);
-            SearchDomain::updateDns($userJawaly);
-        }elseif ($request->event == 'client.delete.dns'){
-            $request->validate([
-                'data.id' => 'required',
-                'data.record_id' => 'required',
-            ]);
-            SearchDomain::deleteDns($userJawaly);
-        }elseif ($request->event == 'client.dns.types'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::dnsTypes($userJawaly);
-        }elseif ($request->event == 'client.dns.records'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::dnsRecords($userJawaly);
-        }elseif ($request->event == 'client.domain.nameservers'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::domainNs($userJawaly);
-        }elseif ($request->event == 'client.update.nameservers'){
-            $request->validate([
-                'data.id' => 'required',
-                'data.nameservers' => 'required|array'
-            ]);
-            SearchDomain::updateDomainNs($userJawaly);
-        }elseif ($request->event == 'client.register.nameservers'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::registerDomainNs($userJawaly);
-        }elseif ($request->event == 'client.domain.epp'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::domainEpp($userJawaly);
-        }elseif ($request->event == 'client.domain.synchronize'){
-            $request->validate([
-                'data.id' => 'required',
-            ]);
-            SearchDomain::domainSynchronize($userJawaly);
-        }elseif ($request->event == 'client.available.tld'){
-            SearchDomain::availableTld($userJawaly);
+                ActiveOrder::activeOrder($userJawaly);
+                break;
+            case 'client.add.contact':
+                $request->validate([
+                    'data.firstname' => 'required',
+                    'data.lastname' => 'required',
+                    'data.email' => 'required',
+                ]);
+                Contact::addContact($userJawaly);
+                break;
+            case 'client.list.contact':
+                Contact::getContacts($userJawaly);
+                break;
+            case 'client.list.categories':
+                Product::getCategories($userJawaly);
+                break;
+            case 'client.list.products':
+                $request->validate([
+                    'data.category_id' => 'required',
+                ]);
+                Product::getProducts($userJawaly);
+                break;
+            case 'client.order.product':
+                $request->validate([
+                    'data.product_id' => 'required',
+                    'data.domain' => 'required',
+                    'data.cycle' => 'required',
+                ]);
+                Product::orderProduct($userJawaly);
+                break;
+            case 'client.order-multiple':
+                $request->validate([
+                    'data' => 'required|array',
+                    'data.*.type' => 'required',
+                ], [
+                    'data.required' => 'حقل البيانات',
+                    'data.*.type.required' => 'حقل النوع الزامي',
+                ]);
+                OrderMultiple::orderMultiple($userJawaly);
+                break;
+            case 'client.list.domains':
+                SearchDomain::listDomains($userJawaly);
+                break;
+            case 'client.domain.details':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainDetails($userJawaly);
+                break;
+            case 'client.create.dns':
+                $request->validate([
+                    'data.id' => 'required',
+                    'data.name' => 'required',
+                    'data.type' => 'required',
+                    'data.priority' => 'required',
+                    'data.content' => 'required',
+                ]);
+                SearchDomain::createDns($userJawaly);
+                break;
+            case 'client.update.dns':
+                $request->validate([
+                    'data.id' => 'required',
+                    'data.record_id' => 'required',
+                    'data.name' => 'required',
+                    'data.type' => 'required',
+                    'data.priority' => 'required',
+                    'data.content' => 'required',
+                ]);
+                SearchDomain::updateDns($userJawaly);
+                break;
+            case 'client.delete.dns':
+                $request->validate([
+                    'data.id' => 'required',
+                    'data.record_id' => 'required',
+                ]);
+                SearchDomain::deleteDns($userJawaly);
+                break;
+            case 'client.dns.types':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::dnsTypes($userJawaly);
+                break;
+            case 'client.dns.records':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::dnsRecords($userJawaly);
+                break;
+            case 'client.domain.nameservers':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainNs($userJawaly);
+                break;
+            case 'client.update.nameservers':
+                $request->validate([
+                    'data.id' => 'required',
+                    'data.nameservers' => 'required|array'
+                ]);
+                SearchDomain::updateDomainNs($userJawaly);
+                break;
+            case 'client.register.nameservers':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::registerDomainNs($userJawaly);
+                break;
+            case 'client.domain.epp':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainEpp($userJawaly);
+                break;
+            case 'client.domain.synchronize':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainSynchronize($userJawaly);
+                break;
+            case 'client.available.tld':
+                SearchDomain::availableTld($userJawaly);
+                break;
+            case 'client.domain.lock':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainLock($userJawaly);
+                break;
+            case 'client.domain.update.lock':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainLock($userJawaly);
+                break;
+            case 'client.domain.update.idprotection':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainIdProtection($userJawaly);
+                break;
+            case 'client.domain.contact':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainContact($userJawaly);
+                break;
+            case 'client.domain.update.contact':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainContact($userJawaly);
+                break;
+            case 'client.domain.emforwarding':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainEmforwarding($userJawaly);
+                break;
+            case 'client.domain.update.emforwarding':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainEmforwarding($userJawaly);
+                break;
+            case 'client.domain.update.forwarding':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainForwarding($userJawaly);
+                break;
+            case 'client.domain.autorenew':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainAutorenew($userJawaly);
+                break;
+            case 'client.domain.update.autorenew':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::updateDomainAutorenew($userJawaly);
+                break;
+            case 'client.domain.flags':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainFlags($userJawaly);
+                break;
+            case 'client.domain.dnssec':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::domainDnssec($userJawaly);
+                break;
+            case 'client.domain.add.dnssec':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                SearchDomain::addDomainDnssec($userJawaly);
+                break;
+            case 'client.domain.tld.form':
+                $request->validate([
+                    'data.tld_id' => 'required',
+                ]);
+                SearchDomain::tldForm($userJawaly);
+                break;
+            case 'client.domain.renew':
+                $request->validate([
+                    'data.id' => 'required',
+                    'data.years' => 'required',
+                ]);
+                SearchDomain::domainRenew($userJawaly);
+                break;
         }
 
         return response()->json([

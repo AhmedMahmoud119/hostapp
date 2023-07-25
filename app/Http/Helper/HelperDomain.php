@@ -131,6 +131,23 @@ class HelperDomain
         return $responseArr;
     }
 
+    public static function domainRenew($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/renew';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('POST', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [
+                'years' => request()->data['years'],
+                'pay_method' => env('PAY_METHOD'),
+            ],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
     public static function domainNs($userJawaly)
     {
         $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/ns';
@@ -195,6 +212,188 @@ class HelperDomain
         $client = HelperGeneral::client($userJawaly);
 
         $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainLock($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/reglock';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainLock($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/reglock';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainIdProtection($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/idprotection';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainContact($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/contact';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainContact($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/contact';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainEmforwarding($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/emforwarding';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainEmforwarding($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/emforwarding';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainForwarding($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/forwarding';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainAutorenew($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/autorenew';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function updateDomainAutorenew($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/autorenew';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainFlags($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/dnssec/flags';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function domainDnssec($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/dnssec';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('GET', $url, [
+            \GuzzleHttp\RequestOptions::JSON => [],
+        ]);
+        $response_data = $response->getBody()->getContents();
+        $responseArr = json_decode($response_data, true);
+
+        return $responseArr;
+    }
+
+    public static function addDomainDnssec($userJawaly)
+    {
+        $url = env('API_URL') . "/api/domain/" . request()->data['id'] . '/dnssec';
+        $client = HelperGeneral::client($userJawaly);
+
+        $response = $client->request('PUT', $url, [
             \GuzzleHttp\RequestOptions::JSON => [],
         ]);
         $response_data = $response->getBody()->getContents();

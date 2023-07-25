@@ -13,7 +13,7 @@ use Exception;
 class SearchDomain
 {
     public static function searchDomain($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
 
             try {
@@ -29,13 +29,11 @@ class SearchDomain
                 }else{
                     $searchDomainData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $searchDomainData = $data;
-//                \DB::rollback();
-                \DB::commit();
             }
 
         } else {
@@ -49,7 +47,7 @@ class SearchDomain
     }
 
     public static function listDomains($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -63,12 +61,12 @@ class SearchDomain
                 }else{
                     $listDomainsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $listDomainsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -82,7 +80,7 @@ class SearchDomain
     }
 
     public static function domainDetails($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -96,12 +94,12 @@ class SearchDomain
                 }else{
                     $domainDetailsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $domainDetailsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -112,8 +110,35 @@ class SearchDomain
         return true;
     }
 
+    public static function domainRenew($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $domainNsData = HelperDomain::domainRenew($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$domainNsData,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            $domainNsData = [];
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
     public static function domainNs($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -127,12 +152,12 @@ class SearchDomain
                 }else{
                     $domainNsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $domainNsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -144,7 +169,7 @@ class SearchDomain
     }
 
     public static function createDns($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -158,12 +183,12 @@ class SearchDomain
                 }else{
                     $createDnsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $createDnsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -175,7 +200,7 @@ class SearchDomain
     }
 
     public static function updateDns($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -188,12 +213,12 @@ class SearchDomain
                 }else{
                     $updateDnsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $updateDnsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -205,7 +230,7 @@ class SearchDomain
     }
 
     public static function deleteDns($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -218,12 +243,12 @@ class SearchDomain
                 }else{
                     $deleteDnsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $deleteDnsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -235,7 +260,7 @@ class SearchDomain
     }
 
     public static function dnsTypes($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -249,12 +274,12 @@ class SearchDomain
                 }else{
                     $dnsTypesData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $dnsTypesData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -266,7 +291,7 @@ class SearchDomain
     }
 
     public static function dnsRecords($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -279,12 +304,12 @@ class SearchDomain
                 }else{
                     $dnsRecordsData = [];
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
                 $dnsRecordsData = $data;
-                \DB::commit();
+
             }
 
         } else {
@@ -296,7 +321,7 @@ class SearchDomain
     }
 
     public static function registerDomainNs($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -308,11 +333,11 @@ class SearchDomain
                     $data = HelperDomain::registerDomainNs($userJawaly);
                     Helper::saveHostBillResponse($userJawaly,$data,200);
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
-                \DB::commit();
+
             }
 
         } else {
@@ -323,7 +348,7 @@ class SearchDomain
     }
 
     public static function updateDomainNs($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -335,11 +360,11 @@ class SearchDomain
                     $data = HelperDomain::updateDomainNs($userJawaly);
                     Helper::saveHostBillResponse($userJawaly,$data,200);
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
-                \DB::commit();
+
             }
 
         } else {
@@ -350,7 +375,7 @@ class SearchDomain
     }
 
     public static function domainEpp($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -362,11 +387,11 @@ class SearchDomain
                     $data = HelperDomain::domainEpp($userJawaly);
                     Helper::saveHostBillResponse($userJawaly,$data,200);
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
-                \DB::commit();
+
             }
 
         } else {
@@ -377,7 +402,7 @@ class SearchDomain
     }
 
     public static function domainSynchronize($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -389,11 +414,345 @@ class SearchDomain
                     $data = HelperDomain::domainSynchronize($userJawaly);
                     Helper::saveHostBillResponse($userJawaly,$data,200);
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
-                \DB::commit();
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainLock($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainLock($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainLock($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainLock($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainIdProtection($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainIdProtection($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainContact($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainContact($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainContact($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainContact($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainEmforwarding($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainEmforwarding($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainEmforwarding($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainEmforwarding($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainForwarding($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainForwarding($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainAutorenew($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainAutorenew($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function updateDomainAutorenew($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::updateDomainAutorenew($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainFlags($userJawaly){
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainFlags($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function domainDnssec($userJawaly){
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::domainDnssec($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function addDomainDnssec($userJawaly){
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperDomain::addDomainDnssec($userJawaly);
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+            } catch (Exception $exception) {
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
             }
 
         } else {
@@ -404,7 +763,7 @@ class SearchDomain
     }
 
     public static function availableTld($userJawaly){
-        \DB::beginTransaction();
+
         if ($userJawaly instanceof User) {
             try {
                 $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
@@ -416,11 +775,39 @@ class SearchDomain
                     $data = HelperTLD::availableTLD($userJawaly);;
                     Helper::saveHostBillResponse($userJawaly,$data,200);
                 }
-                \DB::commit();
+
             } catch (Exception $exception) {
                 $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
                 Helper::saveHostBillResponse($userJawaly,$data,400);
-                \DB::commit();
+
+            }
+
+        } else {
+            Helper::sendNotification(request()->event, 'api key & secret error');
+        }
+
+        return true;
+    }
+
+    public static function tldForm($userJawaly){
+
+        if ($userJawaly instanceof User) {
+            try {
+                $userJobsNotUsed = HostJob::where('user_id', $userJawaly->id)
+                    ->where('status', 0)
+                    ->where('job_id', request()->job_id)->first();
+
+                if ($userJobsNotUsed) {
+                    HelperGeneral::useJob($userJobsNotUsed);
+                    $data = HelperTLD::tldForm($userJawaly);;
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
+                }
+
+            } catch (Exception $exception) {
+                dd($exception);
+                $data = json_decode($exception->getResponse()->getBody()->getContents(),true);
+                Helper::saveHostBillResponse($userJawaly,$data,400);
+
             }
 
         } else {

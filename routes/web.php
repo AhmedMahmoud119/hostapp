@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
 
-
-
-    return 'fds';
 });
 
 Route::get('/clear-cache', function() {
