@@ -15,10 +15,28 @@ class HelperDomain
     public static function searchDomain($userJawaly)
     {
         $url = env('API_URL') . "/api/domain/lookup";
-        $params = [ 'name' => request()->data['name'] ];
+        $params = ['name' => request()->data['name']];
 
         $response_data = HelperGeneral::curlPost($url, $userJawaly, $params);
         $responseArr = json_decode($response_data, true);
+        $responseTldArray = [];
+        try {
+            $host = parse_url(request()->data['name']);
+            $host = str_ireplace('www.', '', $host['host'] ?? ($host['path'] ?? ''));
+            $tld = strstr($host, '.');
+
+            $domainWithoutTld = explode('.', $host);
+            $domainWithoutTld = $domainWithoutTld[0];
+
+            foreach (Tld::where('tld', '!=', $tld)->get() as $tls) {
+                $response = HelperGeneral::curlPost($url, $userJawaly, [
+                    'name' => $domainWithoutTld . $tls->tld,
+                ]);
+                $responseTldArray[] = json_decode($response, true);
+            }
+        } catch (Exception $exception) {}
+
+        $responseArr['another_domains'] = $responseTldArray;
 
         return $responseArr;
     }
@@ -138,7 +156,7 @@ class HelperDomain
 
         $response = $client->request('POST', $url, [
             \GuzzleHttp\RequestOptions::JSON => [
-                'years' => request()->data['years'],
+                'years'      => request()->data['years'],
                 'pay_method' => env('PAY_METHOD'),
             ],
         ]);

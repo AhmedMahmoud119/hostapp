@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Helper\Helper;
+use App\Http\Helper\HelperGeneral;
 use App\Models\AddToHostBill;
 use App\Models\HostJob;
 use App\Models\User;
@@ -24,7 +25,7 @@ class ClientLogin
                     ->where('job_id', request()->job_id)->first();
 
                 if ($userJobsNotUsed) {
-
+                    HelperGeneral::useJob($userJobsNotUsed);
                     $user = User::find($userJawaly->id);
 
                     \DB::table('personal_access_tokens')->where([
@@ -40,14 +41,7 @@ class ClientLogin
                     ];
                     $user->update($data);
 
-                    $userJobsNotUsed->update([
-                        'event_name' => 'client.login',
-                        'status'     => 1,
-                        'message' => 'تم الارسال بنجاح',
-                        'json' => json_encode($data,true),
-                        'error_code' => 200,
-                    ]);
-
+                    Helper::saveHostBillResponse($userJawaly,$data,200);
                 } else {
                     $token = substr(sha1(mt_rand()), 1, 25);
                     Helper::sendNotification(request()->event, 'لا يوجد جوب');

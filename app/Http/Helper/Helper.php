@@ -383,7 +383,7 @@ class Helper
         return $responseArr;
     }
 
-    public static function getProducts($userJawaly)
+    public static function getProducts($userJawaly,$withDetails = 0)
     {
         $url = env('API_URL') . "/api/category/" . request()->data['category_id'] . "/product";
         $client = HelperGeneral::client($userJawaly);
@@ -394,6 +394,22 @@ class Helper
 
         $response_data = $response->getBody()->getContents();
         $responseArr = json_decode($response_data, true);
+
+        foreach ($responseArr['products'] as $key => $response){
+            $del = array('<br>','<br/>', '<ul>', '<li>', '</ul>', '</li>');
+            $arr = explode( $del[0], str_replace($del, $del[0], $response['description']) );
+            $description = array_values(array_filter($arr));
+            $responseArr['products'][$key]['description'] = $description;
+
+            if ($withDetails) {
+                $getProductConfigurationDetails = HelperProduct::getProductConfigurationDetails($userJawaly
+                    ,$response['id']);
+
+                $responseArr['products'][$key]['configuration_details'] = $getProductConfigurationDetails;
+            }
+
+        }
+
 
         return $responseArr;
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helper\Helper;
 use App\Http\Services\ActiveOrder;
+use App\Http\Services\Certificate;
 use App\Http\Services\ClientLogin;
 use App\Http\Services\Contact;
 use App\Http\Services\OrderDomain;
@@ -90,6 +91,18 @@ class EventController extends Controller
                     'data.category_id' => 'required',
                 ]);
                 Product::getProducts($userJawaly);
+                break;
+            case 'client.list.products-in-details':
+                $request->validate([
+                    'data.category_id' => 'required',
+                ]);
+                Product::getProducts($userJawaly,1);
+                break;
+            case 'client.product.configuration':
+                $request->validate([
+                    'data.product_id' => 'required',
+                ]);
+                Product::getProductConfigurationDetails($userJawaly);
                 break;
             case 'client.order.product':
                 $request->validate([
@@ -282,6 +295,24 @@ class EventController extends Controller
                     'data.years' => 'required',
                 ]);
                 SearchDomain::domainRenew($userJawaly);
+                break;
+            case 'client.available.certificates':
+                Certificate::listAvailableCertificates($userJawaly);
+                break;
+            case 'client.certificate.list':
+                Certificate::listCertificates($userJawaly);
+                break;
+            case 'client.certificate.order':
+                $request->validate([
+                    'data.product_id' => 'required',
+                ]);
+                Certificate::orderCertificate($userJawaly);
+                break;
+            case 'client.certificate.details':
+                $request->validate([
+                    'data.id' => 'required',
+                ]);
+                Certificate::certificateDetails($userJawaly);
                 break;
         }
 
