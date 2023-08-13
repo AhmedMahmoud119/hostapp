@@ -18,22 +18,22 @@ class Helper
             $curl = curl_init();
             $app_hash = base64_encode(request()->api_key . ':' . request()->api_secret);
 
-            curl_setopt_array($curl, array(
-//                CURLOPT_URL => 'https://api-sms.4jawaly.com/api/v1/account/area/me',
-                CURLOPT_URL => 'https://api-sms-dev.4jawaly.com/api/v1/account/area/me',
+            curl_setopt_array($curl, [
+                //                CURLOPT_URL => 'https://api-sms.4jawaly.com/api/v1/account/area/me',
+                CURLOPT_URL            => 'https://api-sms-dev.4jawaly.com/api/v1/account/area/me',
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
+                CURLOPT_ENCODING       => '',
+                CURLOPT_MAXREDIRS      => 10,
+                CURLOPT_TIMEOUT        => 0,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'GET',
-                CURLOPT_HTTPHEADER => array(
+                CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST  => 'GET',
+                CURLOPT_HTTPHEADER     => [
                     'Content-Type: application/json',
                     'Accept: application/json',
-                    'Authorization: Basic '.$app_hash
-                ),
-            ));
+                    'Authorization: Basic ' . $app_hash,
+                ],
+            ]);
 
             $jawaly_data = curl_exec($curl);
 
@@ -60,7 +60,7 @@ class Helper
             return $user;
         } catch (Exception $e) {
             return $e->getMessage();
-//            return $e->getResponse()->getBody()->getContents();
+            //            return $e->getResponse()->getBody()->getContents();
         }
 
     }
@@ -152,23 +152,24 @@ class Helper
 
     public static function sendNotification($event, $data)
     {
-        //        try {
-        $url = "https://hook.us1.make.com/oqgq8y6g448mpccb0bsu17ssdngvvbji";
+        try {
+            $url = "https://hook.us1.make.com/oqgq8y6g448mpccb0bsu17ssdngvvbji";
 
-        $client = new Client([
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ],
-        ]);
+            $client = new Client([
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept'       => 'application/json',
+                ],
+            ]);
 
-        $response = $client->request('GET', $url, [
-            \GuzzleHttp\RequestOptions::JSON => [
-                    'event'    => $event,
-                    'response' => $data,
-                    'ip'       => request()->ip(),
-                ] + request()->all(),
-        ]);
+            $response = $client->request('GET', $url, [
+                \GuzzleHttp\RequestOptions::JSON => [
+                        'event'    => $event,
+                        'response' => $data,
+                        'ip'       => request()->ip(),
+                    ] + request()->all(),
+            ]);
+        } catch (Exception $exception) {}
 
         return true;
     }
@@ -204,15 +205,14 @@ class Helper
         return true;
     }
 
-
     public static function orderDomain($userJawaly)
     {
         $url = env('API_URL') . "/api/domain/order";
         $client = HelperGeneral::client($userJawaly);
         $host = parse_url(request()->data['name']);
-        $host = str_ireplace('www.', '', $host['host']??($host['path']??''));
+        $host = str_ireplace('www.', '', $host['host'] ?? ($host['path'] ?? ''));
         $tld = strstr($host, '.');
-        $TldModel = Tld::where('tld',$tld)->first();
+        $TldModel = Tld::where('tld', $tld)->first();
 
         $data = [
             'name'       => request()->data['name'],
@@ -222,10 +222,10 @@ class Helper
             'pay_method' => env('PAY_METHOD'),
         ];
         if (request()->data['action'] == 'transfer') {
-            $data += ['epp'=>request()->data['epp']];
+            $data += ['epp' => request()->data['epp']];
         }
         $response = $client->request('POST', $url, [
-            \GuzzleHttp\RequestOptions::JSON => $data
+            \GuzzleHttp\RequestOptions::JSON => $data,
         ]);
         $response_data = $response->getBody()->getContents();
         $responseArr = json_decode($response_data, true);
@@ -383,7 +383,7 @@ class Helper
         return $responseArr;
     }
 
-    public static function getProducts($userJawaly,$withDetails = 0)
+    public static function getProducts($userJawaly, $withDetails = 0)
     {
         $url = env('API_URL') . "/api/category/" . request()->data['category_id'] . "/product";
         $client = HelperGeneral::client($userJawaly);
@@ -395,15 +395,15 @@ class Helper
         $response_data = $response->getBody()->getContents();
         $responseArr = json_decode($response_data, true);
 
-        foreach ($responseArr['products'] as $key => $response){
-            $del = array('<br>','<br/>', '<ul>', '<li>', '</ul>', '</li>');
-            $arr = explode( $del[0], str_replace($del, $del[0], $response['description']) );
+        foreach ($responseArr['products'] as $key => $response) {
+            $del = ['<br>', '<br/>', '<ul>', '<li>', '</ul>', '</li>'];
+            $arr = explode($del[0], str_replace($del, $del[0], $response['description']));
             $description = array_values(array_filter($arr));
             $responseArr['products'][$key]['description'] = $description;
 
             if ($withDetails) {
-                $getProductConfigurationDetails = HelperProduct::getProductConfigurationDetails($userJawaly
-                    ,$response['id']);
+                $getProductConfigurationDetails = HelperProduct::getProductConfigurationDetails($userJawaly,
+                    $response['id']);
 
                 $responseArr['products'][$key]['configuration_details'] = $getProductConfigurationDetails;
             }
