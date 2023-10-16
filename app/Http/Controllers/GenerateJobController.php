@@ -91,6 +91,23 @@ class GenerateJobController extends Controller
             Helper::sendNotification('error.get.job.details', 'api key & secret error');
         }
 
+        if ($json && $userJobsNotUsed) {
+            if ( $userJobsNotUsed->event_name == 'client.list.categories') {
+                foreach ($json['categories'] as $key => $category) {
+                    $json['categories'][$key]['name'] = __($json['categories'][$key]['name']);
+                }
+            }
+
+            if ( $userJobsNotUsed->event_name == 'client.list.products') {
+                foreach ($json['products'] as $key => $product) {
+                    $json['products'][$key]['name'] = __($json['products'][$key]['name']);
+                    foreach ($json['products'][$key]['periods'] as $keyPeriods => $periods){
+                        $json['products'][$key]['periods'][$keyPeriods]['title'] = __($json['products'][$key]['periods'][$keyPeriods]['title']);
+                    }
+                }
+            }
+
+        }
 
         return response()->json([
             'job_id' => $request->job_id,

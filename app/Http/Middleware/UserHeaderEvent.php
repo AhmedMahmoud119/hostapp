@@ -47,7 +47,7 @@ class UserHeaderEvent
                 $user = User::where('token',$auth[1])->first();
 
                 if($user){
-                    Auth::loginUsingId($user->id);
+                    Auth::logi0nUsingId($user->id);
                 }else{
                     return response()->json([
                         'error' => 'Please Provide Valid Token',

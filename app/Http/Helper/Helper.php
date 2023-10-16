@@ -18,8 +18,10 @@ class Helper
             $curl = curl_init();
             $app_hash = base64_encode(request()->api_key . ':' . request()->api_secret);
 
+            $url = env('link_auth','https://api-sms.4jawaly.com/api/v1/account/area/me');
+
             curl_setopt_array($curl, [
-                    CURLOPT_URL => 'https://api-sms.4jawaly.com/api/v1/account/area/me',
+                    CURLOPT_URL => "$url",
 //                CURLOPT_URL            => 'https://api-sms-dev.4jawaly.com/api/v1/account/area/me',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING       => '',
