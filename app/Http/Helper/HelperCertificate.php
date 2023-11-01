@@ -37,9 +37,22 @@ class HelperCertificate
         $url = env('API_URL') . "/api/certificate/order";
         $client = HelperGeneral::client($userJawaly);
 
+        $id = request()->data['product_id'];
+
+        $urlCertificate = env('API_URL') . "/api/certificate/order/$id/software";
+
+        $response = $client->request('GET', $urlCertificate, []);
+
+        $response_data = $response->getBody()->getContents();
+
+        $responseArr = json_decode($response_data, true);
+
+//        $software = $responseArr['software'][0]['id'];
+        $software = 1000;
+
         $response = $client->request('POST', $url, [
             \GuzzleHttp\RequestOptions::JSON => [
-                "product_id"     => request()->data['product_id'],
+                "product_id"     => $id,
                 "csr"            => request()->data['csr'],
                 "years"          => request()->data['years'],
                 "pay_method"     => env('PAY_METHOD'),
@@ -48,14 +61,14 @@ class HelperCertificate
                 "tech"           => request()->data['tech'],
                 "billing"        => request()->data['billing'],
                 "organization"   => request()->data['organization'],
-                "software"       => request()->data['software'],
+                "software"       => $software,
 //                "data"           => request()->data['data']??[],
             ],
         ]);
 
         $response_data = $response->getBody()->getContents();
         $responseArr = json_decode($response_data, true);
-
+dd($responseArr);
         return $responseArr;
     }
 

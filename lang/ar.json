@@ -1,14 +1,16 @@
 {
-    "Shard Hosting": "استضافة شيرد",
-    "Domains": "دومين",
-    "VPS": "VPS ar",
-    "Dedicated Servers": "Dedicated Servers ar",
-    "SSL": "شهادة امان",
-    "Starter Hosting": "Starter Hosting ar",
-    "Quarterly": "Quarterly ar",
-    "Semi-Annually": "Semi-Annually",
+    "Shard Hosting": "استضافة مشتركة",
+    "Domains": "نطاق",
+    "VPS": "سيرفرات مشتركة",
+    "Dedicated Servers": "سيرفرات خاصة",
+    "SSL": "شهادة SSL",
+    "Starter Hosting": "خطة بداية",
+    "Quarterly": "ربع سنوي",
+    "Semi-Annually": "نصف سنوي",
     "Annually": "سنوي",
-    "Triennially": "Triennially",
-    "Business Hosting": "Business Hosting",
-    "Monthly": "شهري"
+    "Triennially": "ثلاث سنوات",
+    "Business Hosting": "خطة اعمال",
+    "Monthly": "شهري",
+    "Premium Hosting": "خطة مميزة",
+    "Ultimate Hosting": "خطة غير محدودة"
 }
