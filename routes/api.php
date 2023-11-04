@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AddHostBillController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GenerateJobController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +27,8 @@ Route::group(['middleware' => 'userHeader'], function () {
 Route::group(['middleware' => 'userHeaderEvent'], function () {
     Route::post('/event', [EventController::class, 'event']);
 });
+
+Route::post('/save-products', [ProductController::class, 'saveProducts']);
 
 
 //      https://h-v1.4jawaly.com/index.php?bash#
