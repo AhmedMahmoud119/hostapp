@@ -17,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'userHeader'], function () {
+Route::group(['middleware' => ['userHeader','currency']], function () {
 
     Route::get('/generate', [GenerateJobController::class, 'generateJob']);
     Route::get('/get-job', [GenerateJobController::class, 'getJob']);
 
 });
 
-Route::group(['middleware' => 'userHeaderEvent'], function () {
+Route::group(['middleware' => ['userHeaderEvent','currency']], function () {
     Route::post('/event', [EventController::class, 'event']);
 });
 

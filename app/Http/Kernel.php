@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'userHeader' => UserHeader::class,
         'userHeaderEvent' => UserHeaderEvent::class,
         'localization' => \App\Http\Middleware\localization::class,
+        'currency' => \App\Http\Middleware\Currency::class,
     ];
 }

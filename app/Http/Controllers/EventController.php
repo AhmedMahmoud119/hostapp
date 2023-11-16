@@ -22,6 +22,7 @@ class EventController extends Controller
 
     public function event(Request $request)
     {
+
         $request->validate([
             'event' => 'required',
         ], [
@@ -305,6 +306,9 @@ class EventController extends Controller
             case 'client.certificate.order':
                 $request->validate([
                     'data.product_id' => 'required',
+                    'data.domain' => 'required',
+                    'data.years' => 'required',
+                    'data.cert_email' => 'required',
                 ]);
                 Certificate::orderCertificate($userJawaly);
                 break;

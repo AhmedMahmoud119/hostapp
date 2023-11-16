@@ -13,7 +13,6 @@ class GenerateJobController extends Controller
 
     public function generateJob()
     {
-
         $userJawaly = Helper::verifyUserjawaly();
 
         $isUser = false;
